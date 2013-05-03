@@ -6,12 +6,12 @@ import (
 
 //Made to wrap around a file reader to compress html for webserver applications in order to reduce bandwidth
 type Minimizer struct {
-	inp io.Reader
+	inp     io.Reader
 	minflag bool
-	buffer *Queue
+	buffer  *Queue
 	comment bool
-	intag bool
-	intext bool
+	intag   bool
+	intext  bool
 }
 
 //Creates an html minimizer with the given Reader as its input

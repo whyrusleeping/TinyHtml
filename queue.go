@@ -3,11 +3,11 @@ package tinyhtml
 //A linked list style implementation of a queue of bytes
 type Queue struct {
 	head, tail *sqNode
-	length int
+	length     int
 }
 
 type sqNode struct {
-	val byte
+	val  byte
 	next *sqNode
 }
 
@@ -25,7 +25,7 @@ func (sq *Queue) Push(b byte) {
 }
 
 func (sq *Queue) PushMany(b []byte) {
-	for _,v := range b {
+	for _, v := range b {
 		sq.Push(v)
 	}
 }
