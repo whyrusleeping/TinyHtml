@@ -1,5 +1,6 @@
 package tinyhtml
 
+//A linked list style implementation of a queue of bytes
 type Queue struct {
 	head, tail *sqNode
 	length int

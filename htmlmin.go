@@ -4,6 +4,7 @@ import (
 	"io"
 )
 
+//Made to wrap around a file reader to compress html for webserver applications in order to produce bandwidth
 type Minimizer struct {
 	inp io.Reader
 	minflag bool
@@ -13,6 +14,7 @@ type Minimizer struct {
 	intext bool
 }
 
+//Creates an html minimizer with the given Reader as its input
 func NewMinimizer(i io.Reader) *Minimizer {
 	m := new(Minimizer)
 	m.inp = i
@@ -21,6 +23,7 @@ func NewMinimizer(i io.Reader) *Minimizer {
 	return m
 }
 
+//Read compressed html into the buffer given
 func (m *Minimizer) Read(b []byte) (int, error) {
 	ob := make([]byte, 1)
 	i := 0
