@@ -69,6 +69,8 @@ func (m *Minimizer) Read(b []byte) (int, error) {
 			m.intag = false
 		case '\n':
 			continue
+		case '\r':
+			continue
 		case '\t':
 			continue
 		case ' ':
