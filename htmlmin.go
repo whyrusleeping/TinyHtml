@@ -4,7 +4,7 @@ import (
 	"io"
 )
 
-//Made to wrap around a file reader to compress html for webserver applications in order to produce bandwidth
+//Made to wrap around a file reader to compress html for webserver applications in order to reduce bandwidth
 type Minimizer struct {
 	inp io.Reader
 	minflag bool
