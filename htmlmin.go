@@ -2,50 +2,43 @@ package tinyhtml
 
 import (
 	"io"
+	"bufio"
 )
 
 //Made to wrap around a file reader to compress html for webserver applications in order to reduce bandwidth
 type Minimizer struct {
-	inp     io.Reader
-	minflag bool
-	buffer  *Queue
+	inp     *bufio.Reader
 	comment bool
 	intag   bool
 	intext  bool
 }
 
 //Creates an html minimizer with the given Reader as its input
-func NewMinimizer(i io.Reader) *Minimizer {
+func New(i io.Reader) *Minimizer {
 	m := new(Minimizer)
-	m.inp = i
-	m.minflag = true
-	m.buffer = new(Queue)
+	m.inp = bufio.NewReader(i)
+	m.intag = false
+	m.intext = false
+	m.comment = false
 	return m
 }
 
 //Read compressed html into the buffer given
 func (m *Minimizer) Read(b []byte) (int, error) {
-	ob := make([]byte, 1)
 	i := 0
-	var sb byte
 	for i < len(b) {
-		if m.buffer.Size() > 0 {
-			sb = m.buffer.Pop()
-		} else {
-			rn, err := m.inp.Read(ob)
-			if rn != 1 {
-				//what happened?
-			}
-			if err != nil {
-				return i, err
-			}
-			sb = ob[0]
+		sb, err := m.inp.ReadByte()
+		if err != nil {
+			return i, err
 		}
 		switch sb {
 		case '-':
 			if m.comment {
 				temp := make([]byte, 2)
-				m.inp.Read(temp)
+				_, err := m.inp.Read(temp)
+				if err != nil {
+					return i, err
+				}
 				if string(temp) == "->" {
 					m.comment = false
 				}
@@ -55,13 +48,13 @@ func (m *Minimizer) Read(b []byte) (int, error) {
 			if m.comment {
 				continue
 			}
-			temp := make([]byte, 3)
-			m.inp.Read(temp)
-			if string(temp) == "!--" {
+			peek, err := m.inp.Peek(3)
+			if err != nil {
+				return i, err
+			}
+			if string(peek) == "!--" {
 				m.comment = true
 				continue
-			} else {
-				m.buffer.PushMany(temp)
 			}
 			m.intag = true
 			m.intext = false
