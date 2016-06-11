@@ -5,7 +5,7 @@ A small html minimizer for use in web servers. Generally reduces size of code ar
 Usage:
 
 	file,_ := os.Open("Somefile.html")
-	minHtml := tinyhtml.NewMinimizer(file)
+	minHtml := tinyhtml.New(file)
 
 	//Assuming you are using it in a http request handler
 	http.ServeContent(w,r,"My Page", time.Now(), minHtml)
