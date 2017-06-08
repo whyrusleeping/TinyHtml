@@ -21,7 +21,7 @@ func GetAndCompress(url string) {
 	}
 	premin := len(body)
 	prBuf := bytes.NewBuffer(body)
-	tinifier := tinyhtml.NewMinimizer(prBuf)
+	tinifier := tinyhtml.New(prBuf)
 	min, err := ioutil.ReadAll(tinifier)
 	if err != nil {
 		fmt.Println(err)
